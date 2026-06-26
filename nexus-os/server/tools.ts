@@ -12,7 +12,11 @@ import type Anthropic from '@anthropic-ai/sdk'
  * the windowed OS. The server passes an `emitUi` callback for those.
  */
 
-export const WORKSPACE = path.resolve(process.cwd(), 'workspace')
+// On Vercel the project filesystem is read-only; only /tmp is writable. Locally
+// we use ./workspace so the File Explorer can show what the agent writes.
+export const WORKSPACE = process.env.VERCEL
+  ? '/tmp/nexus-workspace'
+  : path.resolve(process.cwd(), 'workspace')
 
 export interface UiAction {
   type: 'open_app' | 'close_app'
